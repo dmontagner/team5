@@ -1,0 +1,10 @@
+
+## Space
+iptables -A PREROUTING -t nat -i br0 -p tcp --dport 9200 -j DNAT --to 192.168.122.113:443
+iptables -A FORWARD -p tcp -d 192.168.122.113 --dport 9200 -j ACCEPT
+
+## Contrail
+iptables -A PREROUTING -t nat -i br0 -p tcp --dport 8143 -j DNAT --to 192.168.122.22:8143
+iptables -A FORWARD -p tcp -d 192.168.122.22 --dport 8143 -j ACCEPT
+iptables -A PREROUTING -t nat -i br0 -p tcp --dport 9201 -j DNAT --to 192.168.122.22:80
+iptables -A FORWARD -p tcp -d 192.168.122.22 --dport 9201 -j ACCEPT
