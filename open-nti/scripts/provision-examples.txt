@@ -37,3 +37,7 @@
 ./provisionOpenNTI.py --debug 12 --operation del --host 192.168.122.8 --tag vqfx5
 
 
+# multiple tag examples
+
+./provisionOpenNTI.py --operation add --host 192.168.122.2 --tag "vmx1 generic"
+./provisionOpenNTI.py --operation add --host 192.168.122.3 --tag "vmx2 generic"
