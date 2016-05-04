@@ -24,10 +24,11 @@ set routing-options static route 172.17.0.0/16 next-hop 192.168.122.1
 set system login user phoenix class super-user authentication <PASSWORD>
 ```
 
-- provision the hosts for analyctsd before the docker start
+- provision the hosts for analyctsd on the host OS - docker shares the 
 
 ```
-./provisionOpenNTI.py --operation add --host 192.168.122.2 --tag "vmx1 generic"
+./provisionOpenNTI.py --operation add --host 192.168.122.2 --tag "vmx1 generic vmx"
+./provisionOpenNTI.py --operation add --host 192.168.122.3 --tag "vmx2 generic vmx"
 ```
 
 - add the crontab for analyticsd
