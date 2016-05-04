@@ -29,3 +29,14 @@ set system login user phoenix class super-user authentication <PASSWORD>
 ```
 ./provisionOpenNTI.py --operation add --host 192.168.122.2 --tag "vmx1 generic"
 ```
+
+- add the crontab for analyticsd
+
+```
+lab@ubuntu-54:~/open-nti$ sudo ./open-nti-start-cron.sh 1m '--tag vmx'
+Container ID : 7ac568d431b2
+
+* * * * * /usr/bin/python /opt/open-nti/open-nti.py -s --tag vmx
+
+lab@ubuntu-54:~/open-nti$
+```
