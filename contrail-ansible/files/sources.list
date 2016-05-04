@@ -1,0 +1,5 @@
+deb http://mirror.kdc.jnpr.net/ubuntu/ trusty main restricted universe multiverse # disabled on upgrade to trusty
+deb http://mirror.kdc.jnpr.net/ubuntu/ trusty-security main restricted universe multiverse # disabled on upgrade to trusty
+deb http://mirror.kdc.jnpr.net/ubuntu/ trusty-updates main restricted universe multiverse # disabled on upgrade to trusty
+deb http://mirror.kdc.jnpr.net/ubuntu/ trusty-proposed main restricted universe multiverse # disabled on upgrade to trusty
+deb http://mirror.kdc.jnpr.net/ubuntu/ trusty-backports main restricted universe multiverse # disabled on upgrade to trusty

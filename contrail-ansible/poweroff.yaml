@@ -1,0 +1,8 @@
+---
+- name: update root password
+  hosts: pod1
+  become: yes
+  tasks:
+  - shell: poweroff
+    async: 0
+    poll: 0

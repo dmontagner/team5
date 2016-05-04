@@ -1,0 +1,39 @@
+#######################################################################################
+# change mtu
+#######################################################################################
+- name: modify route and interface files
+  hosts: pod1
+  become: true
+  any_errors_fatal: true
+  tasks:
+  - name: change mtu to 9100
+    shell: ifconfig eth0 mtu 9100
+    args: 
+      chdir: /opt/contrail/utils 
+
+- name: modify vhost mtu and add routes
+  hosts: pod1compute
+  become: true
+  any_errors_fatal: true
+  tasks:
+  - name: change vhost0 mtu to 9100
+    shell: ifconfig vhost0 mtu 9100
+    args: 
+      chdir: /opt/contrail/utils 
+
+#######################################################################################
+# fix /etc/network/interfaces for mtu and bond settings
+#######################################################################################
+- name: fix interface files
+  hosts: pod1
+  become: true  
+  any_errors_fatal: true
+  tasks:
+  - name: save original networksetup 
+    shell: cp /etc/network/interfaces /etc/network/interfaces.orig 
+  - name: add big MTU to eth0 
+    lineinfile: dest=/etc/network/interfaces 
+                insertafter='^iface eth0' line='    mtu 9100' 
+                state=present
+  - name: optional (if entry exists) add big MTU to vhost0 
+    shell: sed -i '/if-vhost0/a\ \ \ \ mtu 9100' /etc/network/interfaces 

@@ -1,0 +1,7 @@
+---
+- name: update root password
+  hosts: pod1
+  become: yes
+  tasks:
+  - copy: src=/etc/resolv.conf dest=/etc/resolv.conf
+

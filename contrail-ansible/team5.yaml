@@ -1,0 +1,117 @@
+---
+- name: update individual hosts settings
+  hosts: pod1
+  become: true
+  any_errors_fatal: true
+  tasks:
+  - name: add routes to networking
+    lineinfile: dest=/etc/network/interfaces
+                regexp=''
+                insertafter=EOF
+                line='    post-up route add -net {{ data_subnet }} netmask {{ data_netmask }} gw {{ data_gateway }}'
+
+- name: download and install contrail packages
+  hosts: buildhost
+  become: true
+  vars:
+    package_name: contrail-install-packages_3.0.0.0-2725~ubuntu-14-04kilo_all.deb
+  tasks:
+  - name: download Contrail Package 
+    copy: src={{ package_name }} dest=/root/{{ package_name }}
+  - name: dpkg -i the Contrail Package 
+    shell: dpkg -i {{ package_name }}
+    args: 
+      chdir: /root 
+  - name: execute setup.sh 
+    shell: ./setup.sh 
+    args: 
+      chdir: /opt/contrail/contrail_packages/ 
+  - name: copy team5-testbed.py to buildhost
+    copy: > 
+      src=team5-testbed.py 
+      dest=/opt/contrail/utils/fabfile/testbeds/testbed.py 
+      owner=root 
+      group=root 
+      mode=0644 
+  - name: copy all packages on all other hosts from kdc-ibm-4
+    shell: fab install_pkg_all:/root/{{ package_name }} 
+    args: 
+      chdir: /opt/contrail/utils 
+  - name: upgrade the kernel on pod1
+    shell: fab upgrade_kernel_all:reboot=no
+    args: 
+      chdir: /opt/contrail/utils
+
+- name: reboot all hosts
+  hosts: pod1
+  become: true
+  any_errors_fatal: true
+  tasks: 
+  - name: reboot all hosts to apply kernel changes 
+    command: shutdown -r now "Ansible restart triggered" 
+    async: 0 
+    poll: 0 
+    ignore_errors: true 
+  - name: waiting for servers to come back 
+    local_action: wait_for host= state=started 
+    
+- name: install contrail packages
+  hosts: buildhost
+  become: true
+  tasks: 
+  - name: install only relevant packages on ALL hosts that are needed locally 
+    shell: fab install_contrail 
+    args: 
+      chdir: /opt/contrail/utils 
+  - name: setup the eth0 interfaces on ALL hosts 
+    shell: fab setup_interface 
+    args: 
+      chdir: /opt/contrail/utils 
+  - name: add static route on All hosts
+    shell: fab add_static_route
+    args: 
+      chdir: /opt/contrail/utils 
+  - name: install and configure all OpenStack and Contrail services 
+    shell: fab setup_all 
+    args: 
+      chdir: /opt/contrail/utils 
+
+#######################################################################################
+# change mtu
+#######################################################################################
+- name: modify route and interface files
+  hosts: pod1
+  become: true
+  any_errors_fatal: true
+  tasks:
+  - name: change mtu to 9100
+    shell: ifconfig eth0 mtu 9100
+    args: 
+      chdir: /opt/contrail/utils 
+
+- name: modify vhost mtu and add routes
+  hosts: pod1compute
+  become: true
+  any_errors_fatal: true
+  tasks:
+  - name: change vhost0 mtu to 9100
+    shell: ifconfig vhost0 mtu 9100
+    args: 
+      chdir: /opt/contrail/utils 
+
+#######################################################################################
+# fix /etc/network/interfaces for mtu and bond settings
+#######################################################################################
+- name: fix interface files
+  hosts: pod1
+  become: true  
+  any_errors_fatal: true
+  tasks:
+  - name: save original networksetup 
+    shell: cp /etc/network/interfaces /etc/network/interfaces.orig 
+  - name: add big MTU to eth0 
+    lineinfile: dest=/etc/network/interfaces 
+                insertafter='^iface eth0' line='    mtu 9100' 
+                state=present
+  - name: optional (if entry exists) add big MTU to vhost0 
+    shell: sed -i '/if-vhost0/a\ \ \ \ mtu 9100' /etc/network/interfaces 

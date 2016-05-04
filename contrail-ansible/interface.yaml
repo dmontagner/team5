@@ -1,0 +1,7 @@
+---
+- name: update root password
+  hosts: pod1
+  become: yes
+  tasks:
+  - template: src=templates/interface.j2 dest=/tmp/interface
+

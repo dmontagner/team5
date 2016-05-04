@@ -1,0 +1,19 @@
+---
+- name: update root password
+  hosts: pod1
+  become: yes
+  tasks:
+  - user: name=root password='$6$IOoCGktd$bca.WTc.jWhx55Sxe/OD78c3hXOcqSnOu3u7uqCoVfG5zNmBhDAsU4UOtwGpZ68dLKtuTNPzShOI9BvrIJ0Xw.'
+  - replace: dest=/etc/ssh/sshd_config regexp='PermitRootLogin without-password' replace='PermitRootLogin yes'
+  - service: name=ssh state=restarted
+  - authorized_key: user=phoenix key="{{ lookup('file', '/root/.ssh/id_rsa.pub') }}"
+  - authorized_key: user=root key="{{ lookup('file', '/root/.ssh/id_rsa.pub') }}"
+  - template: src=templates/interface.j2 dest=/etc/network/interfaces
+  - template: src=templates/hostname.j2 dest=/etc/hostname
+  - copy: src=hosts dest=/etc/hosts
+  - apt: name=ntp state=present update_cache=true cache_valid_time=3600
+  - copy: src=ntp.conf dest=/etc/ntp.conf
+  - service: name=ntp state=restarted
+  - shell: reboot
+    async: 0
+    poll: 0

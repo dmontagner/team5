@@ -1,0 +1,8 @@
+---
+- name: download and install contrail packages
+  hosts: buildhost
+  vars:
+   package_name: contrail-install-packages_3.0.0.0-2725~ubuntu-14-04kilo_all.deb
+  tasks:
+  - name: download Contrail Package 
+    copy: src={{ package_name }} dest=/root/{{ package_name }}

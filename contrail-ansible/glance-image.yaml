@@ -1,0 +1,41 @@
+#######################################################################################
+# import glance images
+#######################################################################################
+- name: import glance iamges
+  hosts: buildhost
+  become: true
+  tasks:
+  - name: copy trusty-server-cloudimg-amd64-disk1 image to buildhost
+    get_url:
+    args:
+      url: http://bigdata.kdc.jnpr.net/downloads/linux/ubuntu/trusty-server-cloudimg-amd64-disk1.img
+      dest: /root  
+  - name: Create glance image trusty
+    shell: glance --os-tenant-name admin --os-username admin --os-password contrail123 --os-auth-url http://buildhost:5000/v2.0/ image-create --name ubuntu-trusty-cloudimage --disk-format qcow2 --container-format bare --is-public true --file trusty-server-cloudimg-amd64-disk1.img
+    args:
+      chdir: /root
+
+  - name: Create nova vsrx2 flavor
+    shell: nova --os-tenant-name admin --os-username admin --os-password contrail123 --os-auth-url http://buildhost:5000/v2.0/ flavor-create --is-public true vsrx2 100 4096 20 2
+    args:
+      chdir: /root
+
+  - name: copy trusty-iperf3-jumbo image to buildhost
+    get_url:
+    args:
+      url: http://bigdata.kdc.jnpr.net/contrail-vm-images/trusty-iperf3-jumbo.qcow2
+      dest: /root  
+  - name: Create glance image trusty-iperf
+    shell: glance --os-tenant-name admin --os-username admin --os-password contrail123 --os-auth-url http://buildhost:5000/v2.0/ image-create --name trusty-iperf3-jumbo --disk-format qcow2 --container-format bare --min-ram 2048 --min-disk 20 --is-public true --file trusty-iperf3-jumbo.qcow2
+    args:
+      chdir: /root
+
+  - name: copy vsrx-firewall-template image to buildhost
+    get_url:
+    args:
+      url: http://bigdata.kdc.jnpr.net/contrail-vm-images/vsrx-firewall-template.qcow2
+      dest: /root
+  - name: Create glance image vsrx-firewall-template
+    shell: glance --os-tenant-name admin --os-username admin --os-password contrail123 --os-auth-url http://buildhost:5000/v2.0/ image-create --name vsrx-firewall-template --disk-format qcow2 --container-format bare --min-ram 2048 --min-disk 2 --is-public true --file vsrx-firewall-template.qcow2
+    args:
+      chdir: /root
