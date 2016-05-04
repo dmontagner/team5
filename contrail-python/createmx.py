@@ -2,25 +2,31 @@ from vnc_api.vnc_api import *
 from cfgm_common.exceptions import *
 
 #contrail keystone credentials
-contrail_api_host=''
+contrail_api_host='kdc-ibm-4.kdc.jnpr.net'
 contrail_api_port=8082
 contrail_username='admin'
-contrail_password='phoenix123'
+contrail_password='contrail123'
 contrail_tenant='admin'
+
+AUTHN_TYPE = "keystone"
+AUTHN_PROTOCOL = "http"
+AUTHN_SERVER="172.27.171.99"
+AUTHN_PORT = "35357"
+AUTHN_URL = "/v2.0/tokens"
 
 snmp_community="public"
 netconf_username='phoenix'
 netconf_password='phoenix123'
 
 #bgp router params
-router_name = "mx1"
+router_name = "mx999"
 dataplane_ip = "10.50.1.1"
 peer_as = 65001
 local_as = 65001
 
 mgmt_ip = "192.168.122.100"
 
-vnc_lib = VncApi(contrail_username, contrail_password, contrail_tenant,  contrail_api_host, contrail_api_port, user_info=None)
+vnc_lib = VncApi(contrail_username, contrail_password, contrail_tenant,  contrail_api_host, contrail_api_port, user_info=None, auth_type=AUTHN_TYPE, auth_host=AUTHN_SERVER, auth_port=AUTHN_PORT, auth_protocol=AUTHN_PROTOCOL, auth_url=AUTHN_URL)
 
 #check if mx already created
 try:
