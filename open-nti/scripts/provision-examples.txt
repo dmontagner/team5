@@ -1,0 +1,39 @@
+
+
+./provisionOpenNTI.py --operation add --host 192.168.122.2 --tag vmx1
+./provisionOpenNTI.py --operation add --host 192.168.122.3 --tag vmx2
+./provisionOpenNTI.py --operation add --host 192.168.122.4 --tag vqfx1
+./provisionOpenNTI.py --operation add --host 192.168.122.5 --tag vqfx2
+./provisionOpenNTI.py --operation add --host 192.168.122.6 --tag vqfx3
+./provisionOpenNTI.py --operation add --host 192.168.122.7 --tag vqfx4
+./provisionOpenNTI.py --operation add --host 192.168.122.8 --tag vqfx5
+
+
+./provisionOpenNTI.py --operation del --host 192.168.122.2 --tag vmx1
+./provisionOpenNTI.py --operation del --host 192.168.122.3 --tag vmx2
+./provisionOpenNTI.py --operation del --host 192.168.122.4 --tag vqfx1
+./provisionOpenNTI.py --operation del --host 192.168.122.5 --tag vqfx2
+./provisionOpenNTI.py --operation del --host 192.168.122.6 --tag vqfx3
+./provisionOpenNTI.py --operation del --host 192.168.122.7 --tag vqfx4
+./provisionOpenNTI.py --operation del --host 192.168.122.8 --tag vqfx5
+
+
+
+./provisionOpenNTI.py --debug 12 --operation add --host 192.168.122.2 --tag vmx1
+./provisionOpenNTI.py --debug 12 --operation add --host 192.168.122.3 --tag vmx2
+./provisionOpenNTI.py --debug 12 --operation add --host 192.168.122.4 --tag vqfx1
+./provisionOpenNTI.py --debug 12 --operation add --host 192.168.122.5 --tag vqfx2
+./provisionOpenNTI.py --debug 12 --operation add --host 192.168.122.6 --tag vqfx3
+./provisionOpenNTI.py --debug 12 --operation add --host 192.168.122.7 --tag vqfx4
+./provisionOpenNTI.py --debug 12 --operation add --host 192.168.122.8 --tag vqfx5
+
+
+./provisionOpenNTI.py --debug 12 --operation del --host 192.168.122.2 --tag vmx1
+./provisionOpenNTI.py --debug 12 --operation del --host 192.168.122.3 --tag vmx2
+./provisionOpenNTI.py --debug 12 --operation del --host 192.168.122.4 --tag vqfx1
+./provisionOpenNTI.py --debug 12 --operation del --host 192.168.122.5 --tag vqfx2
+./provisionOpenNTI.py --debug 12 --operation del --host 192.168.122.6 --tag vqfx3
+./provisionOpenNTI.py --debug 12 --operation del --host 192.168.122.7 --tag vqfx4
+./provisionOpenNTI.py --debug 12 --operation del --host 192.168.122.8 --tag vqfx5
+
+
